@@ -5,13 +5,13 @@ sealed class DeadProcessing : IEcsSystem, IEcsUpdateSystem {
     [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilter (typeof (Snake))]
+    [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
-    [EcsFilter (typeof (SnakeSegment))]
+    [EcsFilterInclude (typeof (SnakeSegment))]
     EcsFilter _snakeSegmentFilter;
 
-    [EcsFilter (typeof (Obstacle))]
+    [EcsFilterInclude (typeof (Obstacle))]
     EcsFilter _obstacleFilter;
 
     [EcsIndex (typeof (Snake))]

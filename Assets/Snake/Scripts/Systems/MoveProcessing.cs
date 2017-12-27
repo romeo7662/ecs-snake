@@ -24,7 +24,7 @@ public class MovementProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
     [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilter (typeof (Snake))]
+    [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
     [EcsIndex (typeof (Snake))]

@@ -12,10 +12,10 @@ sealed class FoodProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
     [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilter (typeof (Food))]
+    [EcsFilterInclude (typeof (Food))]
     EcsFilter _foodFilter;
 
-    [EcsFilter (typeof (Snake))]
+    [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
     [EcsIndex (typeof (Food))]

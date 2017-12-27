@@ -6,7 +6,7 @@ public class ScoreProcessing : IEcsSystem, IEcsInitSystem {
     [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilter (typeof (Score))]
+    [EcsFilterInclude (typeof (Score))]
     EcsFilter _scoreFilter;
 
     [EcsIndex (typeof (Score))]

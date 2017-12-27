@@ -5,7 +5,7 @@ sealed class UserInputProcessing : IEcsSystem, IEcsUpdateSystem {
     [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilter (typeof (Snake))]
+    [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
     [EcsIndex (typeof (Snake))]

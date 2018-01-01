@@ -1,4 +1,4 @@
-﻿using LeopotamGroup.Ecs;
+using LeopotamGroup.Ecs;
 using UnityEngine;
 
 sealed class SnakeSegment : IEcsComponent {

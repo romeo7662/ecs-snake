@@ -1,7 +1,7 @@
 using LeopotamGroup.Ecs;
 using UnityEngine;
 
-sealed class UserInputProcessing : IEcsSystem, IEcsUpdateSystem {
+sealed class UserInputProcessing : IEcsRunSystem {
     [EcsWorld]
     EcsWorld _world;
 
@@ -11,7 +11,11 @@ sealed class UserInputProcessing : IEcsSystem, IEcsUpdateSystem {
     [EcsIndex (typeof (Snake))]
     int _snakeId;
 
-    void IEcsUpdateSystem.Update () {
+    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
+        return EcsRunSystemType.Update;
+    }
+
+    void IEcsRunSystem.Run () {
         var x = Input.GetAxis ("Horizontal");
         var y = Input.GetAxis ("Vertical");
         if (new Vector2 (x, y).sqrMagnitude > 0.01f) {

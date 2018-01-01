@@ -1,1 +1,1 @@
-﻿struct ScoreChanged { }
+struct ScoreChanged { }

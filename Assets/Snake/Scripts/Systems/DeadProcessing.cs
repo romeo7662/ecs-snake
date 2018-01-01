@@ -1,7 +1,7 @@
-﻿using LeopotamGroup.Ecs;
+using LeopotamGroup.Ecs;
 using UnityEngine;
 
-sealed class DeadProcessing : IEcsSystem, IEcsUpdateSystem {
+sealed class DeadProcessing : IEcsRunSystem {
     [EcsWorld]
     EcsWorld _world;
 
@@ -23,7 +23,11 @@ sealed class DeadProcessing : IEcsSystem, IEcsUpdateSystem {
     [EcsIndex (typeof (Obstacle))]
     int _obstacleId;
 
-    void IEcsUpdateSystem.Update () {
+    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
+        return EcsRunSystemType.Update;
+    }
+
+    void IEcsRunSystem.Run () {
         foreach (var snakeEntity in _snakeFilter.Entities) {
             var snake = _world.GetComponent<Snake> (snakeEntity, _snakeId);
             var snakeHead = snake.Body[snake.Body.Count - 1];

@@ -13,7 +13,7 @@ enum SnakeDirection {
     Left
 }
 
-public class MovementProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
+public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
     const string SnakeTag = "Player";
 
     // delay between updates can be changed at runtime.
@@ -46,7 +46,11 @@ public class MovementProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
 
     void IEcsInitSystem.Destroy () { }
 
-    void IEcsUpdateSystem.Update () {
+    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
+        return EcsRunSystemType.Update;
+    }
+
+    void IEcsRunSystem.Run () {
         if (Time.time < _nextUpdateTime) {
             return;
         }

@@ -16,7 +16,7 @@ public class GameStartup : MonoBehaviour {
     }
 
     void Update () {
-        _world.Update ();
+        _world.RunUpdate ();
     }
 
     void OnDisable () {

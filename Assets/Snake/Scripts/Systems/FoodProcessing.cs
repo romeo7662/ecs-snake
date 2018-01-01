@@ -1,7 +1,7 @@
-﻿using LeopotamGroup.Ecs;
+using LeopotamGroup.Ecs;
 using UnityEngine;
 
-sealed class FoodProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
+sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     const string FoodTag = "Respawn";
 
     // TODO: get correct world size from scene.
@@ -38,7 +38,11 @@ sealed class FoodProcessing : IEcsSystem, IEcsInitSystem, IEcsUpdateSystem {
 
     void IEcsInitSystem.Destroy () { }
 
-    void IEcsUpdateSystem.Update () {
+    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
+        return EcsRunSystemType.Update;
+    }
+
+    void IEcsRunSystem.Run () {
         foreach (var snakeEntity in _snakeFilter.Entities) {
             var snake = _world.GetComponent<Snake> (snakeEntity, _snakeId);
             var snakeCoords = snake.Body[snake.Body.Count - 1].Coords;

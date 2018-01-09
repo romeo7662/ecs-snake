@@ -1,7 +1,7 @@
 using LeopotamGroup.Ecs;
 using UnityEngine;
 
-public class ObstacleProcessing : IEcsSystem, IEcsInitSystem {
+public class ObstacleProcessing : IEcsInitSystem {
     const string ObstacleTag = "Finish";
 
     [EcsWorld]

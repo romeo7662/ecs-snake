@@ -50,7 +50,10 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
                 var food = _world.GetComponent<Food> (foodEntity, _foodId);
                 if (food.Coords.X == snakeCoords.X && food.Coords.Y == snakeCoords.Y) {
                     snake.ShouldGrow = true;
-                    _world.SendEvent (new ScoreChanged ());
+
+                    // create score change event.
+                    _world.AddComponent<ScoreChangeEvent> (_world.CreateEntity ());
+
                     food.Coords.X = Random.Range (1, WorldWidth);
                     food.Coords.Y = Random.Range (1, WorldHeight);
                     food.Transform.localPosition = new Vector3 (food.Coords.X, food.Coords.Y, 0f);

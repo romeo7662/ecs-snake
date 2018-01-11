@@ -1,7 +1,6 @@
-using LeopotamGroup.Ecs;
 using UnityEngine;
 
-sealed class Food : IEcsComponent {
+sealed class Food {
     public Coords Coords;
     public Transform Transform;
 }

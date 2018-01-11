@@ -1,7 +1,6 @@
-using LeopotamGroup.Ecs;
 using UnityEngine;
 
-sealed class SnakeSegment : IEcsComponent {
+sealed class SnakeSegment {
     public Coords Coords;
     public Transform Transform;
 }

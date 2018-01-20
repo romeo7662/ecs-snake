@@ -27,16 +27,13 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
     [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
-    [EcsIndex (typeof (Snake))]
-    int _snakeId;
-
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (SnakeTag)) {
             var tr = unityObject.transform;
 
-            var snake = _world.AddComponent<Snake> (_world.CreateEntity ());
+            var snake = _world.CreateEntityWith<Snake> ();
 
-            var head = _world.AddComponent<SnakeSegment> (_world.CreateEntity ());
+            var head = _world.CreateEntityWith<SnakeSegment> ();
             head.Coords.X = (int) tr.localPosition.x;
             head.Coords.Y = (int) tr.localPosition.y;
             head.Transform = tr;
@@ -57,7 +54,7 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
         _nextUpdateTime = Time.time + _delay;
 
         foreach (var snakeEntity in _snakeFilter.Entities) {
-            var snake = _world.GetComponent<Snake> (snakeEntity, _snakeId);
+            var snake = _world.GetComponent<Snake> (snakeEntity);
             SnakeSegment head;
             if (snake.ShouldGrow) {
                 // just add new segment to body.

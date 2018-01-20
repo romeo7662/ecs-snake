@@ -8,9 +8,6 @@ sealed class UserInputProcessing : IEcsRunSystem {
     [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
-    [EcsIndex (typeof (Snake))]
-    int _snakeId;
-
     EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
         return EcsRunSystemType.Update;
     }
@@ -26,7 +23,7 @@ sealed class UserInputProcessing : IEcsRunSystem {
                 direction = y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
             }
             foreach (var snakeEntity in _snakeFilter.Entities) {
-                var snake = _world.GetComponent<Snake> (snakeEntity, _snakeId);
+                var snake = _world.GetComponent<Snake> (snakeEntity);
                 if (!AreDirectionsOpposite (direction, snake.Direction)) {
                     snake.Direction = direction;
                 }

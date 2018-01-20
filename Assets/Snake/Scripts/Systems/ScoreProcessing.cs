@@ -13,12 +13,9 @@ public class ScoreProcessing : EcsReactSystem, IEcsInitSystem {
     [EcsFilterInclude (typeof (ScoreChangeEvent))]
     EcsFilter _scoreChangeFilter;
 
-    [EcsIndex (typeof (Score))]
-    int _scoreId;
-
     void IEcsInitSystem.Initialize () {
         foreach (var ui in GameObject.FindObjectsOfType<Text> ()) {
-            var score = _world.AddComponent<Score> (_world.CreateEntity ());
+            var score = _world.CreateEntityWith<Score> ();
             score.Amount = 0;
             score.Ui = ui;
             score.Ui.text = FormatText (score.Amount);
@@ -46,7 +43,7 @@ public class ScoreProcessing : EcsReactSystem, IEcsInitSystem {
     public override void RunReact (List<int> entities) {
         // no need to repeat update for all events - we can do it once.
         foreach (var scoreEntity in _scoreUiFilter.Entities) {
-            var score = _world.GetComponent<Score> (scoreEntity, _scoreId);
+            var score = _world.GetComponent<Score> (scoreEntity);
             score.Amount++;
             score.Ui.text = FormatText (score.Amount);
         }

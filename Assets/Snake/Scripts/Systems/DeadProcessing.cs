@@ -14,26 +14,17 @@ sealed class DeadProcessing : IEcsRunSystem {
     [EcsFilterInclude (typeof (Obstacle))]
     EcsFilter _obstacleFilter;
 
-    [EcsIndex (typeof (Snake))]
-    int _snakeId;
-
-    [EcsIndex (typeof (SnakeSegment))]
-    int _snakeSegmentId;
-
-    [EcsIndex (typeof (Obstacle))]
-    int _obstacleId;
-
     EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
         return EcsRunSystemType.Update;
     }
 
     void IEcsRunSystem.Run () {
         foreach (var snakeEntity in _snakeFilter.Entities) {
-            var snake = _world.GetComponent<Snake> (snakeEntity, _snakeId);
+            var snake = _world.GetComponent<Snake> (snakeEntity);
             var snakeHead = snake.Body[snake.Body.Count - 1];
             var snakeCoords = snakeHead.Coords;
             foreach (var obstacleEntity in _obstacleFilter.Entities) {
-                var obstacle = _world.GetComponent<Obstacle> (obstacleEntity, _obstacleId);
+                var obstacle = _world.GetComponent<Obstacle> (obstacleEntity);
                 if (snakeCoords.X == obstacle.Coords.X && snakeCoords.Y == obstacle.Coords.Y) {
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");
@@ -41,7 +32,7 @@ sealed class DeadProcessing : IEcsRunSystem {
             }
 
             foreach (var segmentEntity in _snakeSegmentFilter.Entities) {
-                var segment = _world.GetComponent<SnakeSegment> (segmentEntity, _snakeSegmentId);
+                var segment = _world.GetComponent<SnakeSegment> (segmentEntity);
                 if (segment.Coords.X == snakeCoords.X && segment.Coords.Y == snakeCoords.Y && segment != snakeHead) {
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");

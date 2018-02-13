@@ -32,10 +32,6 @@ public class ScoreProcessing : EcsReactSystem, IEcsInitSystem {
         return _scoreChangeFilter;
     }
 
-    public override EcsRunSystemType GetRunSystemType () {
-        return EcsRunSystemType.Update;
-    }
-
     public override EcsReactSystemType GetReactSystemType () {
         return EcsReactSystemType.OnAdd;
     }

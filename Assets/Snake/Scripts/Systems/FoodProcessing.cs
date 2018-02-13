@@ -30,10 +30,6 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
 
     void IEcsInitSystem.Destroy () { }
 
-    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
-        return EcsRunSystemType.Update;
-    }
-
     void IEcsRunSystem.Run () {
         foreach (var snakeEntity in _snakeFilter.Entities) {
             var snake = _world.GetComponent<Snake> (snakeEntity);

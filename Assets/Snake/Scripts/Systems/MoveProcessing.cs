@@ -43,10 +43,6 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
 
     void IEcsInitSystem.Destroy () { }
 
-    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
-        return EcsRunSystemType.Update;
-    }
-
     void IEcsRunSystem.Run () {
         if (Time.time < _nextUpdateTime) {
             return;

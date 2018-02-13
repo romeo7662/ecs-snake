@@ -14,10 +14,6 @@ sealed class DeadProcessing : IEcsRunSystem {
     [EcsFilterInclude (typeof (Obstacle))]
     EcsFilter _obstacleFilter;
 
-    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
-        return EcsRunSystemType.Update;
-    }
-
     void IEcsRunSystem.Run () {
         foreach (var snakeEntity in _snakeFilter.Entities) {
             var snake = _world.GetComponent<Snake> (snakeEntity);

@@ -8,10 +8,6 @@ sealed class UserInputProcessing : IEcsRunSystem {
     [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
-    EcsRunSystemType IEcsRunSystem.GetRunSystemType () {
-        return EcsRunSystemType.Update;
-    }
-
     void IEcsRunSystem.Run () {
         var x = Input.GetAxis ("Horizontal");
         var y = Input.GetAxis ("Vertical");

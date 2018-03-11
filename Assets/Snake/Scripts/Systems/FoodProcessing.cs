@@ -18,6 +18,9 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     [EcsFilterInclude (typeof (Snake))]
     EcsFilter _snakeFilter;
 
+    [EcsFilterInclude (typeof (ScoreChangeEvent))]
+    EcsFilter _scoreFilter;
+
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (FoodTag)) {
             var tr = unityObject.transform;
@@ -31,16 +34,18 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     void IEcsInitSystem.Destroy () { }
 
     void IEcsRunSystem.Run () {
-        foreach (var snakeEntity in _snakeFilter.Entities) {
-            var snake = _world.GetComponent<Snake> (snakeEntity);
+        for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {
+            var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[snakeEntityId]);
             var snakeCoords = snake.Body[snake.Body.Count - 1].Coords;
-            foreach (var foodEntity in _foodFilter.Entities) {
-                var food = _world.GetComponent<Food> (foodEntity);
+            for (var foodEntityId = 0; foodEntityId < _foodFilter.EntitiesCount; foodEntityId++) {
+                var food = _world.GetComponent<Food> (_foodFilter.Entities[foodEntityId]);
                 if (food.Coords.X == snakeCoords.X && food.Coords.Y == snakeCoords.Y) {
                     snake.ShouldGrow = true;
 
                     // create score change event.
-                    _world.CreateEntityWith<ScoreChangeEvent> ();
+                    for (var scoreEntityId = 0; scoreEntityId < _scoreFilter.EntitiesCount; scoreEntityId++) {
+                        _world.UpdateComponent<ScoreChangeEvent> (_scoreFilter.Entities[scoreEntityId]);
+                    }
 
                     food.Coords.X = Random.Range (1, WorldWidth);
                     food.Coords.Y = Random.Range (1, WorldHeight);

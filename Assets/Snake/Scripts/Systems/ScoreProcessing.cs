@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using LeopotamGroup.Ecs;
 using UnityEngine;
 using UnityEngine.UI;
@@ -20,6 +19,7 @@ public class ScoreProcessing : EcsReactSystem, IEcsInitSystem {
             score.Ui = ui;
             score.Ui.text = FormatText (score.Amount);
         }
+        _world.CreateEntityWith<ScoreChangeEvent> ();
     }
 
     void IEcsInitSystem.Destroy () { }
@@ -33,20 +33,21 @@ public class ScoreProcessing : EcsReactSystem, IEcsInitSystem {
     }
 
     public override EcsReactSystemType GetReactSystemType () {
-        return EcsReactSystemType.OnAdd;
+        return EcsReactSystemType.OnUpdate;
     }
 
-    public override void RunReact (List<int> entities) {
+    public override void RunReact (int[] entities, int count) {
+        // Debug.Log ("score updated " + Time.time);
         // no need to repeat update for all events - we can do it once.
-        foreach (var scoreEntity in _scoreUiFilter.Entities) {
-            var score = _world.GetComponent<Score> (scoreEntity);
+        for (var i = 0; i < _scoreUiFilter.EntitiesCount; i++) {
+            var score = _world.GetComponent<Score> (_scoreUiFilter.Entities[i]);
             score.Amount++;
             score.Ui.text = FormatText (score.Amount);
         }
 
         // and remove all received events.
-        foreach (var entity in entities) {
-            _world.RemoveEntity (entity);
-        }
+        // foreach (var entity in entities) {
+        //     _world.RemoveEntity (entity);
+        // }
     }
 }

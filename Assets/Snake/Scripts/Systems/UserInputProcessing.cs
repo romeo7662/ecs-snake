@@ -18,8 +18,8 @@ sealed class UserInputProcessing : IEcsRunSystem {
             } else {
                 direction = y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
             }
-            foreach (var snakeEntity in _snakeFilter.Entities) {
-                var snake = _world.GetComponent<Snake> (snakeEntity);
+            for (var i = 0; i < _snakeFilter.EntitiesCount; i++) {
+                var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[i]);
                 if (!AreDirectionsOpposite (direction, snake.Direction)) {
                     snake.Direction = direction;
                 }

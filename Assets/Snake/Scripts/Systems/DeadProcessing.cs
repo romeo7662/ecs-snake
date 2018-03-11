@@ -15,20 +15,20 @@ sealed class DeadProcessing : IEcsRunSystem {
     EcsFilter _obstacleFilter;
 
     void IEcsRunSystem.Run () {
-        foreach (var snakeEntity in _snakeFilter.Entities) {
+        for (var i = 0; i < _snakeFilter.EntitiesCount; i++) {
+            var snakeEntity = _snakeFilter.Entities[i];
             var snake = _world.GetComponent<Snake> (snakeEntity);
             var snakeHead = snake.Body[snake.Body.Count - 1];
             var snakeCoords = snakeHead.Coords;
-            foreach (var obstacleEntity in _obstacleFilter.Entities) {
-                var obstacle = _world.GetComponent<Obstacle> (obstacleEntity);
+            for (var ii = 0; ii < _obstacleFilter.EntitiesCount; ii++) {
+                var obstacle = _world.GetComponent<Obstacle> (_obstacleFilter.Entities[ii]);
                 if (snakeCoords.X == obstacle.Coords.X && snakeCoords.Y == obstacle.Coords.Y) {
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");
                 }
             }
-
-            foreach (var segmentEntity in _snakeSegmentFilter.Entities) {
-                var segment = _world.GetComponent<SnakeSegment> (segmentEntity);
+            for (var ii = 0; ii < _snakeSegmentFilter.EntitiesCount; ii++) {
+                var segment = _world.GetComponent<SnakeSegment> (_snakeSegmentFilter.Entities[ii]);
                 if (segment.Coords.X == snakeCoords.X && segment.Coords.Y == snakeCoords.Y && segment != snakeHead) {
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");
@@ -36,7 +36,7 @@ sealed class DeadProcessing : IEcsRunSystem {
                 }
             }
         }
-        if (_snakeFilter.Entities.Count == 0) {
+        if (_snakeFilter.EntitiesCount == 0) {
             // no snakes - exit.
             Application.Quit ();
 #if UNITY_EDITOR

@@ -49,8 +49,8 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
         }
         _nextUpdateTime = Time.time + _delay;
 
-        foreach (var snakeEntity in _snakeFilter.Entities) {
-            var snake = _world.GetComponent<Snake> (snakeEntity);
+        for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {
+            var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[snakeEntityId]);
             SnakeSegment head;
             if (snake.ShouldGrow) {
                 // just add new segment to body.

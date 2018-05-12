@@ -4,7 +4,7 @@ using UnityEngine.UI;
 
 [EcsInject]
 public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
-    EcsWorld _world;
+    EcsWorld _world = null;
 
     EcsFilter<Score> _scoreUiFilter = null;
 

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class GameStartup : MonoBehaviour {
     EcsWorld _world;
+
     EcsSystems _systems;
 
     void OnEnable () {

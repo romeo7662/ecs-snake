@@ -5,7 +5,7 @@ using UnityEngine;
 public class ObstacleProcessing : IEcsInitSystem {
     const string ObstacleTag = "Finish";
 
-    EcsWorld _world;
+    EcsWorld _world = null;
 
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (ObstacleTag)) {

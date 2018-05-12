@@ -10,7 +10,7 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
 
     const int WorldHeight = 15;
 
-    EcsWorld _world;
+    EcsWorld _world = null;
 
     EcsFilter<Food> _foodFilter = null;
 

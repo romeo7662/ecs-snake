@@ -3,7 +3,7 @@ using UnityEngine;
 
 [EcsInject]
 sealed class DeadProcessing : IEcsRunSystem {
-    EcsWorld _world;
+    EcsWorld _world = null;
 
     EcsFilter<Snake> _snakeFilter = null;
 

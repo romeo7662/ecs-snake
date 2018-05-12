@@ -22,7 +22,7 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
 
     float _nextUpdateTime;
 
-    EcsWorld _world;
+    EcsWorld _world = null;
 
     EcsFilter<Snake> _snakeFilter = null;
 

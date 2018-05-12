@@ -1,1 +1,3 @@
-﻿sealed class ScoreChangeEvent { }
+﻿sealed class ScoreChangeEvent {
+    public int Amount;
+}

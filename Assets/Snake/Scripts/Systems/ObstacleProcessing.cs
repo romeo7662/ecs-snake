@@ -1,18 +1,16 @@
 using LeopotamGroup.Ecs;
 using UnityEngine;
 
+[EcsInject]
 public class ObstacleProcessing : IEcsInitSystem {
     const string ObstacleTag = "Finish";
 
-    [EcsWorld]
     EcsWorld _world;
 
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (ObstacleTag)) {
             var tr = unityObject.transform;
-            var entity = _world.CreateEntity ();
-
-            var obstacle = _world.AddComponent<Obstacle> (entity);
+            var obstacle = _world.CreateEntityWith<Obstacle> ();
             obstacle.Coords.X = (int) tr.localPosition.x;
             obstacle.Coords.Y = (int) tr.localPosition.y;
             obstacle.Transform = tr;

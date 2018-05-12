@@ -4,5 +4,5 @@
 	branch = develop
 [submodule "Assets/Ecs.UnityIntegration"]
 	path = Assets/Ecs.UnityIntegration
-	url = https://Leopotam@github.com/Leopotam/ecs-unityintegration.git
+	url = https://github.com/Leopotam/ecs-unityintegration.git
 	branch = develop

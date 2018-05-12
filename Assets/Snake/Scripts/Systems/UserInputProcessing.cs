@@ -1,12 +1,9 @@
 using LeopotamGroup.Ecs;
 using UnityEngine;
 
+[EcsInject]
 sealed class UserInputProcessing : IEcsRunSystem {
-    [EcsWorld]
-    EcsWorld _world;
-
-    [EcsFilterInclude (typeof (Snake))]
-    EcsFilter _snakeFilter;
+    EcsFilter<Snake> _snakeFilter = null;
 
     void IEcsRunSystem.Run () {
         var x = Input.GetAxis ("Horizontal");
@@ -19,7 +16,7 @@ sealed class UserInputProcessing : IEcsRunSystem {
                 direction = y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
             }
             for (var i = 0; i < _snakeFilter.EntitiesCount; i++) {
-                var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[i]);
+                var snake = _snakeFilter.Components1[i];
                 if (!AreDirectionsOpposite (direction, snake.Direction)) {
                     snake.Direction = direction;
                 }

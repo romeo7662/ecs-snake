@@ -13,6 +13,7 @@ enum SnakeDirection {
     Left
 }
 
+[EcsInject]
 public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
     const string SnakeTag = "Player";
 
@@ -21,11 +22,9 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
 
     float _nextUpdateTime;
 
-    [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilterInclude (typeof (Snake))]
-    EcsFilter _snakeFilter;
+    EcsFilter<Snake> _snakeFilter = null;
 
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (SnakeTag)) {
@@ -50,12 +49,12 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
         _nextUpdateTime = Time.time + _delay;
 
         for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {
-            var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[snakeEntityId]);
+            var snake = _snakeFilter.Components1[snakeEntityId];
             SnakeSegment head;
             if (snake.ShouldGrow) {
                 // just add new segment to body.
                 snake.ShouldGrow = false;
-                head = _world.AddComponent<SnakeSegment> (_world.CreateEntity ());
+                head = _world.CreateEntityWith<SnakeSegment> ();
                 head.Coords = GetForwardCoords (snake.Body[snake.Body.Count - 1].Coords, snake.Direction);
                 head.Transform = GameObject.Instantiate (snake.Body[0].Transform.gameObject).transform;
                 head.Transform.localPosition = new Vector3 (head.Coords.X, head.Coords.Y, 0f);

@@ -1,6 +1,7 @@
 using LeopotamGroup.Ecs;
 using UnityEngine;
 
+[EcsInject]
 sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     const string FoodTag = "Respawn";
 
@@ -9,17 +10,11 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
 
     const int WorldHeight = 15;
 
-    [EcsWorld]
     EcsWorld _world;
 
-    [EcsFilterInclude (typeof (Food))]
-    EcsFilter _foodFilter;
+    EcsFilter<Food> _foodFilter = null;
 
-    [EcsFilterInclude (typeof (Snake))]
-    EcsFilter _snakeFilter;
-
-    [EcsFilterInclude (typeof (ScoreChangeEvent))]
-    EcsFilter _scoreFilter;
+    EcsFilter<Snake> _snakeFilter = null;
 
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (FoodTag)) {
@@ -35,18 +30,18 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
 
     void IEcsRunSystem.Run () {
         for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {
-            var snake = _world.GetComponent<Snake> (_snakeFilter.Entities[snakeEntityId]);
+            var snake = _snakeFilter.Components1[snakeEntityId];
             var snakeCoords = snake.Body[snake.Body.Count - 1].Coords;
             for (var foodEntityId = 0; foodEntityId < _foodFilter.EntitiesCount; foodEntityId++) {
-                var food = _world.GetComponent<Food> (_foodFilter.Entities[foodEntityId]);
+                var food = _foodFilter.Components1[foodEntityId];
                 if (food.Coords.X == snakeCoords.X && food.Coords.Y == snakeCoords.Y) {
                     snake.ShouldGrow = true;
 
                     // create score change event.
-                    for (var scoreEntityId = 0; scoreEntityId < _scoreFilter.EntitiesCount; scoreEntityId++) {
-                        _world.UpdateComponent<ScoreChangeEvent> (_scoreFilter.Entities[scoreEntityId]);
-                    }
+                    var changeScore = _world.CreateEntityWith<ScoreChangeEvent> ();
+                    changeScore.Amount = 1;
 
+                    // respawn food at new position.
                     food.Coords.X = Random.Range (1, WorldWidth);
                     food.Coords.Y = Random.Range (1, WorldHeight);
                     food.Transform.localPosition = new Vector3 (food.Coords.X, food.Coords.Y, 0f);

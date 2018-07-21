@@ -1,4 +1,4 @@
-using LeopotamGroup.Ecs;
+using Leopotam.Ecs;
 using UnityEngine;
 
 struct Coords {

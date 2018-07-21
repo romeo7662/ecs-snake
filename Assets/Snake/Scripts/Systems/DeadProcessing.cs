@@ -1,4 +1,4 @@
-using LeopotamGroup.Ecs;
+using Leopotam.Ecs;
 using UnityEngine;
 
 [EcsInject]
@@ -20,6 +20,7 @@ sealed class DeadProcessing : IEcsRunSystem {
             for (var ii = 0; ii < _obstacleFilter.EntitiesCount; ii++) {
                 var obstacle = _obstacleFilter.Components1[ii];
                 if (snakeCoords.X == obstacle.Coords.X && snakeCoords.Y == obstacle.Coords.Y) {
+                    snake.Body.Clear ();
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");
                 }
@@ -27,6 +28,7 @@ sealed class DeadProcessing : IEcsRunSystem {
             for (var ii = 0; ii < _snakeSegmentFilter.EntitiesCount; ii++) {
                 var segment = _snakeSegmentFilter.Components1[ii];
                 if (segment.Coords.X == snakeCoords.X && segment.Coords.Y == snakeCoords.Y && segment != snakeHead) {
+                    snake.Body.Clear ();
                     _world.RemoveEntity (snakeEntity);
                     Debug.Log ("Snake killed");
                     break;

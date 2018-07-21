@@ -1,4 +1,4 @@
-using LeopotamGroup.Ecs;
+using Leopotam.Ecs;
 using UnityEngine;
 
 public class GameStartup : MonoBehaviour {
@@ -9,7 +9,7 @@ public class GameStartup : MonoBehaviour {
     void OnEnable () {
         _world = new EcsWorld ();
 #if UNITY_EDITOR
-        LeopotamGroup.Ecs.UnityIntegration.EcsWorldObserver.Create (_world);
+        Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create (_world);
 #endif  
         _systems = new EcsSystems (_world)
             .Add (new ObstacleProcessing ())
@@ -20,7 +20,7 @@ public class GameStartup : MonoBehaviour {
             .Add (new ScoreProcessing ());
         _systems.Initialize ();
 #if UNITY_EDITOR
-        LeopotamGroup.Ecs.UnityIntegration.EcsSystemsObserver.Create (_systems);
+        Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create (_systems);
 #endif
     }
 

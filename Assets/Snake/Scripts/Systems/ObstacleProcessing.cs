@@ -7,6 +7,8 @@ public class ObstacleProcessing : IEcsInitSystem {
 
     EcsWorld _world = null;
 
+    EcsFilter<Obstacle> _obstacles = null;
+
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (ObstacleTag)) {
             var tr = unityObject.transform;
@@ -17,5 +19,10 @@ public class ObstacleProcessing : IEcsInitSystem {
         }
     }
 
-    void IEcsInitSystem.Destroy () { }
+    void IEcsInitSystem.Destroy () {
+        for (var i = 0; i < _obstacles.EntitiesCount; i++) {
+            _obstacles.Components1[i].Transform = null;
+            _world.RemoveEntity (_obstacles.Entities[i]);
+        }
+    }
 }

@@ -26,7 +26,12 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
         }
     }
 
-    void IEcsInitSystem.Destroy () { }
+    void IEcsInitSystem.Destroy () {
+        for (var i = 0; i < _foodFilter.EntitiesCount; i++) {
+            _foodFilter.Components1[i].Transform = null;
+            _world.RemoveEntity (_foodFilter.Entities[i]);
+        }
+    }
 
     void IEcsRunSystem.Run () {
         for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {

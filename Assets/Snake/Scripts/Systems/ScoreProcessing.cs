@@ -19,7 +19,12 @@ public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
         }
     }
 
-    void IEcsInitSystem.Destroy () { }
+    void IEcsInitSystem.Destroy () {
+        for (var i = 0; i < _scoreUiFilter.EntitiesCount; i++) {
+            _scoreUiFilter.Components1[i].Ui = null;
+            _world.RemoveEntity (_scoreUiFilter.Entities[i]);
+        }
+    }
 
     string FormatText (int v) {
         return string.Format ("Score: {0}", v);

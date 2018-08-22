@@ -26,6 +26,8 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
 
     EcsFilter<Snake> _snakeFilter = null;
 
+    EcsFilter<SnakeSegment> _snakeSegmentFilter = null;
+
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (SnakeTag)) {
             var tr = unityObject.transform;
@@ -40,7 +42,12 @@ public class MovementProcessing : IEcsInitSystem, IEcsRunSystem {
         }
     }
 
-    void IEcsInitSystem.Destroy () { }
+    void IEcsInitSystem.Destroy () {
+        for (var i = 0; i < _snakeSegmentFilter.EntitiesCount; i++) {
+            _snakeSegmentFilter.Components1[i].Transform = null;
+            _world.RemoveEntity (_snakeSegmentFilter.Entities[i]);
+        }
+    }
 
     void IEcsRunSystem.Run () {
         if (Time.time < _nextUpdateTime) {

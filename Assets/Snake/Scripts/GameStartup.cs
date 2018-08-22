@@ -29,6 +29,9 @@ public class GameStartup : MonoBehaviour {
     }
 
     void OnDisable () {
-        _systems.Destroy ();
+        _systems.Dispose ();
+        _systems = null;
+        _world.Dispose ();
+        _world = null;
     }
 }

@@ -1,7 +1,9 @@
 using Leopotam.Ecs;
 using UnityEngine;
 
+#if !LEOECS_DISABLE_INJECT
 [EcsInject]
+#endif
 sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     const string FoodTag = "Respawn";
 
@@ -19,7 +21,7 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     void IEcsInitSystem.Initialize () {
         foreach (var unityObject in GameObject.FindGameObjectsWithTag (FoodTag)) {
             var tr = unityObject.transform;
-            var food = _world.CreateEntityWith<Food> ();
+            _world.CreateEntityWith<Food> (out var food);
             food.Coords.X = (int) tr.localPosition.x;
             food.Coords.Y = (int) tr.localPosition.y;
             food.Transform = tr;
@@ -27,23 +29,23 @@ sealed class FoodProcessing : IEcsInitSystem, IEcsRunSystem {
     }
 
     void IEcsInitSystem.Destroy () {
-        for (var i = 0; i < _foodFilter.EntitiesCount; i++) {
+        foreach (var i in _foodFilter) {
             _foodFilter.Components1[i].Transform = null;
             _world.RemoveEntity (_foodFilter.Entities[i]);
         }
     }
 
     void IEcsRunSystem.Run () {
-        for (var snakeEntityId = 0; snakeEntityId < _snakeFilter.EntitiesCount; snakeEntityId++) {
+        foreach (var snakeEntityId in _snakeFilter) {
             var snake = _snakeFilter.Components1[snakeEntityId];
             var snakeCoords = snake.Body[snake.Body.Count - 1].Coords;
-            for (var foodEntityId = 0; foodEntityId < _foodFilter.EntitiesCount; foodEntityId++) {
+            foreach (var foodEntityId in _foodFilter) {
                 var food = _foodFilter.Components1[foodEntityId];
                 if (food.Coords.X == snakeCoords.X && food.Coords.Y == snakeCoords.Y) {
                     snake.ShouldGrow = true;
 
                     // create score change event.
-                    var changeScore = _world.CreateEntityWith<ScoreChangeEvent> ();
+                    _world.CreateEntityWith<ScoreChangeEvent> (out var changeScore);
                     changeScore.Amount = 1;
 
                     // respawn food at new position.

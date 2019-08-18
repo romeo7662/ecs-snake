@@ -2,7 +2,9 @@ using Leopotam.Ecs;
 using UnityEngine;
 using UnityEngine.UI;
 
+#if !LEOECS_DISABLE_INJECT
 [EcsInject]
+#endif
 public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
     EcsWorld _world = null;
 
@@ -12,7 +14,7 @@ public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
 
     void IEcsInitSystem.Initialize () {
         foreach (var ui in GameObject.FindObjectsOfType<Text> ()) {
-            var score = _world.CreateEntityWith<Score> ();
+            _world.CreateEntityWith<Score> (out var score);
             score.Amount = 0;
             score.Ui = ui;
             score.Ui.text = FormatText (score.Amount);
@@ -20,7 +22,7 @@ public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
     }
 
     void IEcsInitSystem.Destroy () {
-        for (var i = 0; i < _scoreUiFilter.EntitiesCount; i++) {
+        foreach (var i in _scoreUiFilter) {
             _scoreUiFilter.Components1[i].Ui = null;
             _world.RemoveEntity (_scoreUiFilter.Entities[i]);
         }
@@ -31,14 +33,14 @@ public class ScoreProcessing : IEcsRunSystem, IEcsInitSystem {
     }
 
     void IEcsRunSystem.Run () {
-        for (var i = 0; i < _scoreChangeFilter.EntitiesCount; i++) {
-            var amount = _scoreChangeFilter.Components1[i].Amount;
-            for (var j = 0; j < _scoreUiFilter.EntitiesCount; j++) {
-                var score = _scoreUiFilter.Components1[j];
+        foreach (var scoreChangeIdx in _scoreChangeFilter) {
+            var amount = _scoreChangeFilter.Components1[scoreChangeIdx].Amount;
+            foreach (var scoreUiIdx in _scoreUiFilter) {
+                var score = _scoreUiFilter.Components1[scoreUiIdx];
                 score.Amount += amount;
                 score.Ui.text = FormatText (score.Amount);
             }
-            _world.RemoveEntity (_scoreChangeFilter.Entities[i]);
+            _world.RemoveEntity (_scoreChangeFilter.Entities[scoreChangeIdx]);
         }
     }
 }

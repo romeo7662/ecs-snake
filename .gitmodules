@@ -1,8 +1,0 @@
-[submodule "Assets/Ecs"]
-	path = Assets/Ecs
-	url = https://github.com/Leopotam/ecs.git
-	branch = develop
-[submodule "Assets/Ecs.UnityIntegration"]
-	path = Assets/Ecs.UnityIntegration
-	url = https://github.com/Leopotam/ecs-unityintegration.git
-	branch = develop

@@ -1,7 +1,9 @@
 using Leopotam.Ecs;
 using UnityEngine;
 
+#if !LEOECS_DISABLE_INJECT
 [EcsInject]
+#endif
 sealed class UserInputProcessing : IEcsRunSystem {
     EcsFilter<Snake> _snakeFilter = null;
 
@@ -15,7 +17,7 @@ sealed class UserInputProcessing : IEcsRunSystem {
             } else {
                 direction = y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
             }
-            for (var i = 0; i < _snakeFilter.EntitiesCount; i++) {
+            foreach (var i in _snakeFilter) {
                 var snake = _snakeFilter.Components1[i];
                 if (!AreDirectionsOpposite (direction, snake.Direction)) {
                     snake.Direction = direction;

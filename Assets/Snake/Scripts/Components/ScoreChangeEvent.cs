@@ -1,3 +1,7 @@
-﻿sealed class ScoreChangeEvent {
-    public int Amount;
+﻿using Leopotam.Ecs;
+
+namespace SnakeGame {
+    sealed class ScoreChangeEvent : IEcsOneFrame {
+        public int Amount;
+    }
 }

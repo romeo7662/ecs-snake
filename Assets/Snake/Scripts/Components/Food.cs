@@ -1,6 +1,13 @@
+using Leopotam.Ecs;
 using UnityEngine;
 
-sealed class Food {
-    public Coords Coords;
-    public Transform Transform;
+namespace SnakeGame {
+    sealed class Food : IEcsAutoReset {
+        public Coords Coords;
+        public Transform Transform;
+
+        void IEcsAutoReset.Reset () {
+            Transform = null;
+        }
+    }
 }

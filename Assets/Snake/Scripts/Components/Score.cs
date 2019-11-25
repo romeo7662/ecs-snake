@@ -1,6 +1,13 @@
+using Leopotam.Ecs;
 using UnityEngine.UI;
 
-sealed class Score {
-    public int Amount;
-    public Text Ui;
+namespace SnakeGame {
+    sealed class Score : IEcsAutoReset {
+        public int Amount;
+        public Text Ui;
+
+        void IEcsAutoReset.Reset () {
+            Ui = null;
+        }
+    }
 }

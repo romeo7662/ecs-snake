@@ -1,5 +1,4 @@
 using Leopotam.Ecs;
-using Leopotam.Ecs.UnityIntegration;
 using UnityEngine;
 
 namespace SnakeGame {
@@ -10,7 +9,7 @@ namespace SnakeGame {
         void OnEnable () {
             _world = new EcsWorld ();
 #if UNITY_EDITOR
-            EcsWorldObserver.Create (_world);
+            Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create (_world);
 #endif
             _systems = new EcsSystems (_world)
                 .Add (new ObstacleProcessing ())
@@ -21,7 +20,7 @@ namespace SnakeGame {
                 .Add (new ScoreProcessing ());
             _systems.Init ();
 #if UNITY_EDITOR
-            EcsSystemsObserver.Create (_systems);
+            Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create (_systems);
 #endif
         }
 

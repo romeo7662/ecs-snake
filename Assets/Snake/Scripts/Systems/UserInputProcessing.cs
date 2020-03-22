@@ -10,13 +10,16 @@ namespace SnakeGame {
             var y = Input.GetAxis ("Vertical");
             if (new Vector2 (x, y).sqrMagnitude > 0.01f) {
                 SnakeDirection direction;
-                if (Mathf.Abs (x) > Mathf.Abs (y))
+                if (Mathf.Abs (x) > Mathf.Abs (y)) {
                     direction = x > 0f ? SnakeDirection.Right : SnakeDirection.Left;
-                else
+                } else {
                     direction = y > 0f ? SnakeDirection.Up : SnakeDirection.Down;
+                }
                 foreach (var i in _snakeFilter) {
-                    var snake = _snakeFilter.Get1[i];
-                    if (!AreDirectionsOpposite (direction, snake.Direction)) snake.Direction = direction;
+                    ref var snake = ref _snakeFilter.Get1 (i);
+                    if (!AreDirectionsOpposite (direction, snake.Direction)) {
+                        snake.Direction = direction;
+                    }
                 }
             }
         }
@@ -28,7 +31,7 @@ namespace SnakeGame {
                 a = b;
                 b = t;
             }
-            return a == SnakeDirection.Up && b == SnakeDirection.Down || a == SnakeDirection.Right && b == SnakeDirection.Left;
+            return (a == SnakeDirection.Up && b == SnakeDirection.Down) || (a == SnakeDirection.Right && b == SnakeDirection.Left);
         }
     }
 }

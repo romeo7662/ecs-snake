@@ -1,7 +1,5 @@
-﻿using Leopotam.Ecs;
-
 namespace SnakeGame {
-    sealed class ScoreChangeEvent : IEcsOneFrame {
+    struct ScoreChangeEvent {
         public int Amount;
     }
 }

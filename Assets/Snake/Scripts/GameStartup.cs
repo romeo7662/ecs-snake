@@ -1,39 +1,44 @@
+using System.Collections;
 using Leopotam.Ecs;
 using UnityEngine;
 
 namespace SnakeGame {
-    sealed class GameStartup : MonoBehaviour {
-        EcsSystems _systems;
+    public class GameStartup : MonoBehaviour {
         EcsWorld _world;
+        EcsSystems _systems;
 
-        void OnEnable () {
+        void Start () {
             _world = new EcsWorld ();
+            _systems = new EcsSystems (_world);
 #if UNITY_EDITOR
             Leopotam.Ecs.UnityIntegration.EcsWorldObserver.Create (_world);
+            Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create (_systems);
 #endif
-            _systems = new EcsSystems (_world)
+            _systems
+                // systems.
                 .Add (new ObstacleProcessing ())
                 .Add (new UserInputProcessing ())
                 .Add (new MovementProcessing ())
                 .Add (new FoodProcessing ())
                 .Add (new DeadProcessing ())
-                .Add (new ScoreProcessing ());
-            _systems.Init ();
-#if UNITY_EDITOR
-            Leopotam.Ecs.UnityIntegration.EcsSystemsObserver.Create (_systems);
-#endif
+                .Add (new ScoreProcessing ())
+                // one-frames ScoreChangeEvent will be removed here.
+                .OneFrame<ScoreChangeEvent> ()
+                // init.
+                .Init ();
         }
 
         void Update () {
-            _systems.Run ();
-            _world.EndFrame ();
+            _systems?.Run ();
         }
 
-        void OnDisable () {
-            _systems.Destroy ();
-            _systems = null;
-            _world.Destroy ();
-            _world = null;
+        void OnDestroy () {
+            if (_systems != null) {
+                _systems.Destroy ();
+                _systems = null;
+                _world.Destroy ();
+                _world = null;
+            }
         }
     }
 }

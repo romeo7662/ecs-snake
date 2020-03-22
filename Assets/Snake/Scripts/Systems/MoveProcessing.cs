@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using Leopotam.Ecs;
 using UnityEngine;
 
@@ -5,6 +6,10 @@ namespace SnakeGame {
     struct Coords {
         public int X;
         public int Y;
+
+        public override string ToString () {
+            return $"({X},{Y})";
+        }
     }
 
     enum SnakeDirection {
@@ -14,58 +19,68 @@ namespace SnakeGame {
         Left
     }
 
-    sealed class MovementProcessing : IEcsInitSystem, IEcsDestroySystem, IEcsRunSystem {
+    public class MovementProcessing : IEcsInitSystem, IEcsDestroySystem, IEcsRunSystem {
         const string SnakeTag = "Player";
-        readonly EcsFilter<Snake> _snakeFilter = null;
-        readonly EcsFilter<SnakeSegment> _snakeSegmentFilter = null;
-
-        readonly EcsWorld _world = null;
 
         // delay between updates can be changed at runtime.
-        readonly float _delay = 0.2f;
+        float _delay = 0.2f;
 
         float _nextUpdateTime;
 
-        void IEcsDestroySystem.Destroy () {
-            foreach (var i in _snakeSegmentFilter) _snakeSegmentFilter.Entities[i].Destroy ();
-        }
+        readonly EcsWorld _world = null;
+        readonly EcsFilter<Snake> _snakeFilter = null;
+        readonly EcsFilter<SnakeSegment> _snakeSegmentFilter = null;
 
         void IEcsInitSystem.Init () {
             foreach (var unityObject in GameObject.FindGameObjectsWithTag (SnakeTag)) {
                 var tr = unityObject.transform;
-                _world.NewEntityWith<Snake> (out var snake);
-                _world.NewEntityWith<SnakeSegment> (out var head);
+                ref var snake = ref _world.NewEntity ().Set<Snake> ();
+                snake.Body = new List<EcsComponentRef<SnakeSegment>> (256);
+                snake.Direction = SnakeDirection.Up;
+                var headEntity = _world.NewEntity ();
+                ref var head = ref headEntity.Set<SnakeSegment> ();
                 var pos = tr.localPosition;
                 head.Coords.X = (int) pos.x;
                 head.Coords.Y = (int) pos.y;
                 head.Transform = tr;
-                snake.Body.Add (head);
+                snake.Body.Add (headEntity.Ref<SnakeSegment> ());
+            }
+        }
+
+        void IEcsDestroySystem.Destroy () {
+            foreach (var i in _snakeSegmentFilter) {
+                _snakeSegmentFilter.GetEntity (i).Destroy ();
             }
         }
 
         void IEcsRunSystem.Run () {
-            if (Time.time < _nextUpdateTime) return;
+            if (Time.time < _nextUpdateTime) {
+                return;
+            }
             _nextUpdateTime = Time.time + _delay;
 
             foreach (var snakeEntityId in _snakeFilter) {
-                var snake = _snakeFilter.Get1[snakeEntityId];
+                ref var snake = ref _snakeFilter.Get1 (snakeEntityId);
                 if (snake.ShouldGrow) {
                     // just add new segment to body.
                     snake.ShouldGrow = false;
-                    _world.NewEntityWith<SnakeSegment> (out var head);
-                    head.Coords = GetForwardCoords (snake.Body[snake.Body.Count - 1].Coords, snake.Direction);
-                    head.Transform = Object.Instantiate (snake.Body[0].Transform.gameObject).transform;
+                    var headEntity = _world.NewEntity ();
+                    ref var head = ref headEntity.Set<SnakeSegment> ();
+                    head.Coords = GetForwardCoords (snake.Body[snake.Body.Count - 1].Unref ().Coords, snake.Direction);
+                    head.Transform = Object.Instantiate (snake.Body[0].Unref ().Transform);
                     head.Transform.localPosition = new Vector3 (head.Coords.X, head.Coords.Y, 0f);
-                    snake.Body.Add (head);
+                    var headRef = headEntity.Ref<SnakeSegment> ();
+                    snake.Body.Add (headRef);
                 } else {
                     // move all body segments to new positions.
                     Coords coords;
                     for (var i = 0; i < snake.Body.Count - 1; i++) {
-                        coords = snake.Body[i + 1].Coords;
-                        snake.Body[i].Coords = coords;
-                        snake.Body[i].Transform.localPosition = new Vector3 (coords.X, coords.Y, 0f);
+                        coords = snake.Body[i + 1].Unref ().Coords;
+                        ref var segment = ref snake.Body[i].Unref ();
+                        segment.Coords = coords;
+                        segment.Transform.localPosition = new Vector3 (coords.X, coords.Y, 0f);
                     }
-                    var head = snake.Body[snake.Body.Count - 1];
+                    ref var head = ref snake.Body[snake.Body.Count - 1].Unref ();
                     coords = GetForwardCoords (head.Coords, snake.Direction);
                     head.Coords = coords;
                     head.Transform.localPosition = new Vector3 (coords.X, coords.Y, 0f);

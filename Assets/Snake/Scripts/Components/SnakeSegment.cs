@@ -1,13 +1,8 @@
-using Leopotam.Ecs;
 using UnityEngine;
 
 namespace SnakeGame {
-    sealed class SnakeSegment : IEcsAutoReset {
+    struct SnakeSegment {
         public Coords Coords;
         public Transform Transform;
-
-        void IEcsAutoReset.Reset () {
-            Transform = null;
-        }
     }
 }

@@ -1,5 +1,8 @@
+using UnityEngine;
+
 namespace SnakeGame {
-    sealed class Obstacle {
+    struct Obstacle {
         public Coords Coords;
+        public Transform Transform;
     }
 }

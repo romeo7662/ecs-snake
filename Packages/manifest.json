@@ -1,11 +1,15 @@
 {
   "dependencies": {
-    "com.leopotam.ecs": "https://github.com/Leopotam/ecs.git#2019.12.22",
-    "com.leopotam.ecs-ui": "https://github.com/Leopotam/ecs-ui.git#v20191122",
-    "com.leopotam.ecs-unityintegration": "https://github.com/Leopotam/ecs-unityintegration.git#2019.12.22",
-    "com.unity.package-manager-ui": "2.1.2",
+    "com.leopotam.ecs": "https://github.com/Leopotam/ecs.git#2020.3.22",
+    "com.leopotam.ecs-ui": "https://github.com/Leopotam/ecs-ui.git#2020.3.22",
+    "com.leopotam.ecs-unityintegration": "https://github.com/Leopotam/ecs-unityintegration.git#2020.3.22",
+    "com.unity.ide.rider": "1.1.4",
+    "com.unity.ide.vscode": "1.1.4",
+    "com.unity.test-framework": "1.1.13",
     "com.unity.textmeshpro": "2.0.1",
+    "com.unity.ugui": "1.0.0",
     "com.unity.modules.ai": "1.0.0",
+    "com.unity.modules.androidjni": "1.0.0",
     "com.unity.modules.animation": "1.0.0",
     "com.unity.modules.assetbundle": "1.0.0",
     "com.unity.modules.audio": "1.0.0",
@@ -38,16 +42,16 @@
   },
   "lock": {
     "com.leopotam.ecs": {
-      "hash": "7487624e083e8b76afc27c3e60c6d85c82f1316f",
-      "revision": "2019.12.22"
+      "revision": "2020.3.22",
+      "hash": "2ff435176721563c254670988494b636fcf3cc67"
     },
     "com.leopotam.ecs-ui": {
-      "hash": "1fc897f5151d3e0de56ab8505ca977b5000fd2b7",
-      "revision": "v20191122"
+      "revision": "2020.3.22",
+      "hash": "b958105d01529ef7985022133f2ab84b53f89d8b"
     },
     "com.leopotam.ecs-unityintegration": {
-      "hash": "8b41169a8fd16f014f273d92e6e98eb7a4a3e594",
-      "revision": "2019.12.22"
+      "revision": "2020.3.22",
+      "hash": "a3ab84f4e28443f8ba66231cb697598277459b8d"
     }
   }
 }
